@@ -17,13 +17,13 @@ body{
 }
 
 :where(.config-container,.quiz-container){
+    display: none;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.13);
 }
 
 .config-container{
-    display: none;
     width: 415px;
     padding: 25px;
     text-align: center;
