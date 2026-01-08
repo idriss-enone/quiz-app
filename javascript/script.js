@@ -1,7 +1,9 @@
 import quizQuestions from "./questions.js"
 
-let questionTitle = document.querySelector(".question-text");
+const questionTitle = document.querySelector(".question-text");
 const answerOptions = document.querySelector(".answer-options");
+const nextQuestionBtn = document.querySelector(".next-question-btn");
+
 let userCategory ="programming";
 
 function getQuestionsByCategory(allCategories,category){
@@ -57,10 +59,16 @@ function renderChoice(questionData) {
     
 }
 
+function loadRandomQuestion() {
+    let currentQuestion = getRandomQuestion(quizQuestions,userCategory);
+     renderQuestion(currentQuestion);
+}
 
-let currentQuestion = getRandomQuestion(quizQuestions,userCategory);
+loadRandomQuestion()
 
-renderQuestion(currentQuestion);
+nextQuestionBtn.addEventListener("click",loadRandomQuestion);
+
+
 
 
 
