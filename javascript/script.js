@@ -4,7 +4,43 @@ const questionTitle = document.querySelector(".question-text");
 const answerOptions = document.querySelector(".answer-options");
 const nextQuestionBtn = document.querySelector(".next-question-btn");
 
+
 let userCategory ="programming";
+let currentQuestion = null;
+
+function addIcon(optionElement, iconName) {
+    const span = document.createElement("span");
+    span.classList.add("material-symbols-outlined");
+    span.textContent = iconName;
+    optionElement.appendChild(span);
+}
+
+const handleAnswer = (answerUserIndex) =>{
+
+    const options = document.querySelectorAll(".answer-option");
+
+    options.forEach((option, index) => {
+
+        let isCorrect = currentQuestion.answer === index;
+
+        if (isCorrect) {
+            option.classList.add("correct");
+            addIcon(option,"check_circle");
+        }
+        
+        // Mauvaise réponse cliquée
+        if (index === answerUserIndex && !isCorrect) {
+            option.classList.add("incorrect");
+            addIcon(option, "cancel");
+        }
+
+        // Bloquer les clics
+        option.style.pointerEvents = "none";
+
+    })
+
+
+}
 
 function getQuestionsByCategory(allCategories,category){
     const categoryData  = allCategories.find(
@@ -42,17 +78,19 @@ function renderQuestion(questionData) {
 
     renderChoice(questionData);
     console.log(questionData.question);
+
 }
 
 function renderChoice(questionData) {
     
-    questionData.choices.forEach(choice => {
+    questionData.choices.forEach((choice ,index)=> {
         const li = document.createElement("li");
         const p = document.createElement("p");
         li.classList.add("answer-option");
         p.textContent = choice;
         li.appendChild(p);
-        answerOptions.appendChild(li)
+        answerOptions.appendChild(li);
+        li.addEventListener("click",() => handleAnswer(index));
     })
     
     console.log(questionData.choices)
@@ -60,7 +98,7 @@ function renderChoice(questionData) {
 }
 
 function loadRandomQuestion() {
-    let currentQuestion = getRandomQuestion(quizQuestions,userCategory);
+    currentQuestion = getRandomQuestion(quizQuestions,userCategory);
      renderQuestion(currentQuestion);
 }
 
