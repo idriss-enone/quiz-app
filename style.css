@@ -97,7 +97,7 @@ body{
     padding: 13px 25px;
 }
 .config-container .start-quiz-btn:hover,
-.quiz-footer .next-question-btn:hover,
+.quiz-footer .next-question-btn:hover:not(:disabled),
 .result-container .try-again-btn:hover{
     background-color: #403795;
 }
@@ -194,6 +194,14 @@ body{
     align-items: center;
     gap: 5px;
     padding: 9px 17px;
+}
+
+.next-question-btn:disabled{
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+    opacity: 0.7;
+
 }
 
 .result-container{

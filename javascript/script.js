@@ -17,6 +17,9 @@ function addIcon(optionElement, iconName) {
 
 const handleAnswer = (answerUserIndex) =>{
 
+    
+    nextQuestionBtn.disabled = false;
+
     const options = document.querySelectorAll(".answer-option");
 
     options.forEach((option, index) => {
@@ -38,7 +41,7 @@ const handleAnswer = (answerUserIndex) =>{
         option.style.pointerEvents = "none";
 
     })
-
+    
 
 }
 
@@ -82,6 +85,8 @@ function renderQuestion(questionData) {
 }
 
 function renderChoice(questionData) {
+   
+    nextQuestionBtn.disabled = true;
     
     questionData.choices.forEach((choice ,index)=> {
         const li = document.createElement("li");
