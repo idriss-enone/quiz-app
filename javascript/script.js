@@ -1,5 +1,6 @@
 import quizQuestions from "./questions.js"
 
+const configContainer = document.querySelector(".config-container");
 const questionTitle = document.querySelector(".question-text");
 const answerOptions = document.querySelector(".answer-options");
 const nextQuestionBtn = document.querySelector(".next-question-btn");
@@ -8,6 +9,7 @@ const timerDisplay = document.querySelector(".timer-duration");
 const quizContainer = document.querySelector(".quiz-container");
 const resultContainer = document.querySelector(".result-container");
 const resultMessage = document.querySelector(".result-message");
+const tryAgainBtn = document.querySelector(".try-again-btn");
 
 
 
@@ -109,29 +111,25 @@ function showAnswers(answerUserIndex = null) {
     const options = document.querySelectorAll(".answer-option");
     options.forEach((option, index) => {
         let isCorrect = currentQuestion.answer === index;
-        console.log(isCorrect)
 
         // Toujours afficher la bonne réponse
         if (isCorrect) {
             option.classList.add("correct");
             addIcon(option,"check_circle");
-        }
-
-        // Mauvaise réponse cliquée
-        if (answerUserIndex !== null && index === answerUserIndex && !isCorrect) {
+        }else if (index === answerUserIndex) {
             option.classList.add("incorrect");
             addIcon(option, "cancel");
         }
-            
-        // Bloquer les clics
+        // Bloquer les clics 
         option.style.pointerEvents = "none";
     })
-    nextQuestionBtn.disabled = false;
 
     // Compter la réponse correcte UNIQUEMENT si l'utilisateur a bien répondu
-    if (answerUserIndex !== null && answerUserIndex === currentQuestion.answer) {
+    if (answerUserIndex === currentQuestion.answer) {
         correctAnswersCount++;
     }
+
+    nextQuestionBtn.disabled = false; 
 }
 
 
@@ -171,14 +169,24 @@ function renderChoice(questionData) {
     
 }
 
+function resetQuiz() {
+    // Reset game state
+    questionIndexHistory.length = 0;
+    correctAnswersCount = 0;
+    configContainer.style.display = "block";
+    resultContainer.style.display = "none";
+}
+
+tryAgainBtn.addEventListener("click", resetQuiz);
+
+nextQuestionBtn.addEventListener("click",loadRandomQuestion);
+
 function loadRandomQuestion() {
     currentQuestion = getRandomQuestion(quizQuestions,userCategory);
      renderQuestion(currentQuestion);
 }
 
 loadRandomQuestion()
-
-nextQuestionBtn.addEventListener("click",loadRandomQuestion);
 
 
 
