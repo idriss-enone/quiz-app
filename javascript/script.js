@@ -3,11 +3,44 @@ import quizQuestions from "./questions.js"
 const questionTitle = document.querySelector(".question-text");
 const answerOptions = document.querySelector(".answer-options");
 const nextQuestionBtn = document.querySelector(".next-question-btn");
+const questionStatus = document.querySelector(".question-status");
+const timerDisplay = document.querySelector(".timer-duration");
 
 
+const QUIZ_TIME_LIMIT = 5;
+let currentTime = QUIZ_TIME_LIMIT;
+let timer  = null;
 let userCategory ="programming";
 let currentQuestion = null;
 const questionIndexHistory = [];
+let numberOfQuestions = 4;
+
+
+// Initialize and start the timer for the current question
+function startTimer(){
+    console.log("Timer actif");
+    timer = setInterval(() =>{
+        currentTime--
+        timerDisplay.textContent = `${currentTime}s`
+        if(currentTime <= 0){
+            showAnswers();
+            stopTimer()
+        }
+    },1000);
+}
+
+// Clear and reset the timer
+function resetTimer(){
+    stopTimer()
+    currentTime = 5;
+}
+
+function stopTimer() {
+    console.log("Le timer est arrêté");
+    clearInterval(timer);
+    timer = null;
+};
+
 
 
 function getRandomQuestion(allCategories,category){
@@ -16,6 +49,10 @@ function getRandomQuestion(allCategories,category){
      if (categoryQuestions.length === 0) {
         console.log("No questions found for this category");
         return;
+    }
+    
+    if(questionIndexHistory.length >= numberOfQuestions){
+        return console.log("Game over");
     }
 
     //Filter out already asked questions and choose a random one
@@ -50,38 +87,32 @@ function addIcon(optionElement, iconName) {
 }
 
 const handleAnswer = (answerUserIndex) =>{
-
+    stopTimer();
+    showAnswers(answerUserIndex)
     
-    nextQuestionBtn.disabled = false;
-
-    const options = document.querySelectorAll(".answer-option");
-
-    options.forEach((option, index) => {
-
-        let isCorrect = currentQuestion.answer === index;
-
-        if (isCorrect) {
-            option.classList.add("correct");
-            addIcon(option,"check_circle");
-        }
-        
-        // Mauvaise réponse cliquée
-        if (index === answerUserIndex && !isCorrect) {
-            option.classList.add("incorrect");
-            addIcon(option, "cancel");
-        }
-
-        // Bloquer les clics
-        option.style.pointerEvents = "none";
-
-    })
-    
-
 }
 
 
 
-
+function showAnswers(answerUserIndex = null) {
+    const options = document.querySelectorAll(".answer-option");
+    options.forEach((option, index) => {
+        let isCorrect = currentQuestion.answer === index;
+        if (isCorrect) {
+            option.classList.add("correct");
+            addIcon(option,"check_circle");
+        }
+        // Mauvaise réponse cliquée
+        if (answerUserIndex !== null && index === answerUserIndex && !isCorrect) {
+            option.classList.add("incorrect");
+            addIcon(option, "cancel");
+        }
+            
+        // Bloquer les clics
+        option.style.pointerEvents = "none";
+    })
+    nextQuestionBtn.disabled = false;
+}
 
 
 function renderQuestion(questionData) {
@@ -90,11 +121,14 @@ function renderQuestion(questionData) {
         console.log("No questions found")
         return;
     }
+    resetTimer();
+    startTimer();
     answerOptions.innerHTML="";
     questionTitle.textContent = questionData.question;
 
+     questionStatus.innerHTML = `<b>${questionIndexHistory.length}</b> of <b>${numberOfQuestions}</b> Questions`
+
     renderChoice(questionData);
-    console.log(questionData.question);
 
 }
 
