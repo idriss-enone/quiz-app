@@ -5,26 +5,30 @@ const answerOptions = document.querySelector(".answer-options");
 const nextQuestionBtn = document.querySelector(".next-question-btn");
 const questionStatus = document.querySelector(".question-status");
 const timerDisplay = document.querySelector(".timer-duration");
+const quizContainer = document.querySelector(".quiz-container");
+const resultContainer = document.querySelector(".result-container");
+const resultMessage = document.querySelector(".result-message");
 
 
-const QUIZ_TIME_LIMIT = 5;
+
+const QUIZ_TIME_LIMIT = 7;
 let currentTime = QUIZ_TIME_LIMIT;
 let timer  = null;
 let userCategory ="programming";
 let currentQuestion = null;
 const questionIndexHistory = [];
 let numberOfQuestions = 4;
-
+let correctAnswersCount = 0;
 
 // Initialize and start the timer for the current question
 function startTimer(){
     console.log("Timer actif");
     timer = setInterval(() =>{
         currentTime--
-        timerDisplay.textContent = `${currentTime}s`
+        timerDisplay.textContent = `${currentTime}s`;
         if(currentTime <= 0){
             showAnswers();
-            stopTimer()
+            stopTimer();
         }
     },1000);
 }
@@ -32,7 +36,7 @@ function startTimer(){
 // Clear and reset the timer
 function resetTimer(){
     stopTimer()
-    currentTime = 5;
+    currentTime = QUIZ_TIME_LIMIT;
 }
 
 function stopTimer() {
@@ -41,7 +45,14 @@ function stopTimer() {
     timer = null;
 };
 
+function showQuizResults() {
+    quizContainer.style.display = "none";
+    resultContainer.style.display = "block";
 
+    const resultText = `You answered <b>${correctAnswersCount}</b> out of <b>${numberOfQuestions}</b> questions correctly. Great effort!`;
+    resultMessage.innerHTML = resultText;
+    console.log("Game over");
+}
 
 function getRandomQuestion(allCategories,category){
     let categoryQuestions = getQuestionsByCategory(allCategories,category);
@@ -52,7 +63,7 @@ function getRandomQuestion(allCategories,category){
     }
     
     if(questionIndexHistory.length >= numberOfQuestions){
-        return console.log("Game over");
+        return showQuizResults()
     }
 
     //Filter out already asked questions and choose a random one
@@ -98,10 +109,14 @@ function showAnswers(answerUserIndex = null) {
     const options = document.querySelectorAll(".answer-option");
     options.forEach((option, index) => {
         let isCorrect = currentQuestion.answer === index;
+        console.log(isCorrect)
+
+        // Toujours afficher la bonne réponse
         if (isCorrect) {
             option.classList.add("correct");
             addIcon(option,"check_circle");
         }
+
         // Mauvaise réponse cliquée
         if (answerUserIndex !== null && index === answerUserIndex && !isCorrect) {
             option.classList.add("incorrect");
@@ -112,6 +127,11 @@ function showAnswers(answerUserIndex = null) {
         option.style.pointerEvents = "none";
     })
     nextQuestionBtn.disabled = false;
+
+    // Compter la réponse correcte UNIQUEMENT si l'utilisateur a bien répondu
+    if (answerUserIndex !== null && answerUserIndex === currentQuestion.answer) {
+        correctAnswersCount++;
+    }
 }
 
 
@@ -129,6 +149,7 @@ function renderQuestion(questionData) {
      questionStatus.innerHTML = `<b>${questionIndexHistory.length}</b> of <b>${numberOfQuestions}</b> Questions`
 
     renderChoice(questionData);
+    console.log(correctAnswersCount)
 
 }
 
