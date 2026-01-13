@@ -10,16 +10,19 @@ const quizContainer = document.querySelector(".quiz-container");
 const resultContainer = document.querySelector(".result-container");
 const resultMessage = document.querySelector(".result-message");
 const tryAgainBtn = document.querySelector(".try-again-btn");
+const startQuizBtn = document.querySelector(".start-quiz-btn");
+const questionOption = document.querySelectorAll(".question-option");
+const categoryOption = document.querySelectorAll(".category-option");
 
 
-
-const QUIZ_TIME_LIMIT = 7;
+const QUIZ_TIME_LIMIT = 15;
 let currentTime = QUIZ_TIME_LIMIT;
 let timer  = null;
-let userCategory ="programming";
+let selectedCategory = null;
 let currentQuestion = null;
 const questionIndexHistory = [];
-let numberOfQuestions = 4;
+let numberOfQuestions = null;
+
 let correctAnswersCount = 0;
 
 // Initialize and start the timer for the current question
@@ -39,12 +42,15 @@ function startTimer(){
 function resetTimer(){
     stopTimer()
     currentTime = QUIZ_TIME_LIMIT;
+    quizContainer.querySelector(".quiz-timer").style.background = "#32313C";
+    
 }
 
 function stopTimer() {
     console.log("Le timer est arrêté");
     clearInterval(timer);
     timer = null;
+    
 };
 
 function showQuizResults() {
@@ -84,8 +90,10 @@ function getRandomQuestion(allCategories,category){
 }
 
 function getQuestionsByCategory(allCategories,category){
+    console.log(category.toLowerCase())
+    console.log(allCategories)
     const categoryData  = allCategories.find(
-        cat => cat.category.toLocaleLowerCase() === category.toLocaleLowerCase()
+        cat => cat.category.toLowerCase() === category.toLowerCase()
     );
     return categoryData ? categoryData.questions: [];
 }
@@ -102,7 +110,7 @@ function addIcon(optionElement, iconName) {
 const handleAnswer = (answerUserIndex) =>{
     stopTimer();
     showAnswers(answerUserIndex)
-    
+    quizContainer.querySelector(".quiz-timer").style.background = "#32313C";
 }
 
 
@@ -129,7 +137,8 @@ function showAnswers(answerUserIndex = null) {
         correctAnswersCount++;
     }
 
-    nextQuestionBtn.disabled = false; 
+    nextQuestionBtn.disabled = false;
+    quizContainer.querySelector(".quiz-timer").style.background = "#c31402";
 }
 
 
@@ -141,6 +150,7 @@ function renderQuestion(questionData) {
     }
     resetTimer();
     startTimer();
+    
     answerOptions.innerHTML="";
     questionTitle.textContent = questionData.question;
 
@@ -177,16 +187,44 @@ function resetQuiz() {
     resultContainer.style.display = "none";
 }
 
+function startQuiz() {
+    console.log("Quiz started");
+    configContainer.style.display = "none";
+    quizContainer.style.display = "block";
+
+    selectedCategory = document.querySelector(".category-option.active").textContent;
+    console.log("Selected Category:", selectedCategory);
+    numberOfQuestions = parseInt(document.querySelector(".question-option.active").textContent);
+    console.log("Number of Questions:", numberOfQuestions);
+
+    loadRandomQuestion()
+}
+
+questionOption.forEach((option) => {
+    option.addEventListener("click", () => {
+        option.parentNode.querySelector(".active").classList.remove("active");
+        option.classList.add("active");
+    });
+});
+
+categoryOption.forEach((category) => {
+    category.addEventListener("click", () => {
+        category.parentNode.querySelector(".active").classList.remove("active");
+        category.classList.add("active");
+    });
+});
+
+startQuizBtn.addEventListener("click", startQuiz);
 tryAgainBtn.addEventListener("click", resetQuiz);
 
 nextQuestionBtn.addEventListener("click",loadRandomQuestion);
 
 function loadRandomQuestion() {
-    currentQuestion = getRandomQuestion(quizQuestions,userCategory);
+    currentQuestion = getRandomQuestion(quizQuestions,selectedCategory);
      renderQuestion(currentQuestion);
 }
 
-loadRandomQuestion()
+
 
 
 

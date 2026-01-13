@@ -27,6 +27,7 @@ body{
     width: 415px;
     padding: 25px;
     text-align: center;
+    display:block;
     
 }
 
@@ -104,7 +105,7 @@ body{
 
 .quiz-container{
     width:480px; 
-    display: block;
+    /*display: block;*/
 }
 .quiz-container .quiz-header{
     display:flex;
@@ -127,6 +128,7 @@ body{
     background:#32313C;
     border-radius: 6px;
     padding: 7px 9px;
+    transition: background 0.3s ease;
 }
 .quiz-header .quiz-timer span{
    font-size: 1.4rem;
