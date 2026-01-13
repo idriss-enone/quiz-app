@@ -81,15 +81,15 @@ Le projet implémente une fonction principale :
 
 - Écran de configuration
 
-![Configuration du quiz](images/config-quiz.png)
+![Configuration du quiz](images/config-quiz.PNG)
 
 - Écran du quiz
 
-![Quiz en cours](images/quiz.png)
+![Quiz en cours](images/quiz.PNG)
 
 - Écran des résultats
 
-![Résultats du quiz](images/result-quiz.png)
+![Résultats du quiz](images/result-quiz.PNG)
 
 
 - Voir la démo en ligne :
