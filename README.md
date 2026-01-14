@@ -92,9 +92,10 @@ Le projet implémente une fonction principale :
 ![Résultats du quiz](images/result-quiz.PNG)
 
 
-- Voir la démo en ligne :
+- Voir la démo en ligne : [https://idriss-enone.github.io/quiz-app/](https://idriss-enone.github.io/quiz-app/)
 
-[https://idriss-enone.github.io/quiz-app/](https://idriss-enone.github.io/quiz-app/)
+Vous pouvez également **voir le résultat en ligne sur CodePen** :
+[https://codepen.io/idriss-enone/full/NPrbeRa](https://codepen.io/idriss-enone/full/NPrbeRa)
 
 
 ---
